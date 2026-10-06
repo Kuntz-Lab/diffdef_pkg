@@ -38,12 +38,14 @@ Build with the venv active:
 source /opt/ros/jazzy/setup.bash
 source ~/venvs/diffdef/bin/activate
 cd ~/retraction_ws
-colcon build --packages-select diffdef_pkg
+python -m colcon build --symlink-install --packages-select diffdef_pkg
 ```
+
+Use `python -m colcon`, not plain `colcon`. With `--symlink-install`, the `diffdef_node` launcher is hard-coded to the Python that ran colcon. Plain `colcon` runs on `/usr/bin/python3`, which has no torch, so the node would fail on `import torch` even with the venv active.
 
 ### Running
 
-Always activate the venv first. The node runs with whichever `python3` is first on `PATH`, and an active conda env will otherwise take precedence.
+Always activate the venv first.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -53,7 +55,7 @@ source ~/retraction_ws/install/setup.bash
 ros2 run diffdef_pkg diffdef_node
 ```
 
-The checkpoint path is set by `CKPT_PATH` at the top of [diffdef_pkg/diffdef_node.py](diffdef_pkg/diffdef_node.py). Override it with `--ckpt /path/to/checkpoint.pt`. If you edit `CKPT_PATH`, rebuild unless you built with `--symlink-install`.
+The checkpoint path is set by `CKPT_PATH` at the top of [diffdef_pkg/diffdef_node.py](diffdef_pkg/diffdef_node.py). Override it with `--ckpt /path/to/checkpoint.pt`. With `--symlink-install`, edits to the node take effect without rebuilding.
 
 ### Options
 
