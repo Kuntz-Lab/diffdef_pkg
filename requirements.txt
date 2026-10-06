@@ -1,0 +1,12 @@
+# pip-only dependencies for diffdef_node.
+# Install into a venv that can see the system ROS packages:
+#   /usr/bin/python3 -m venv --system-site-packages ~/venvs/diffdef
+#   source ~/venvs/diffdef/bin/activate
+#   pip install -r requirements.txt
+# ROS dependencies are in package.xml.
+
+# Keep numpy 1.x to match the apt-installed numpy that sensor_msgs_py is built against
+numpy<2
+# colcon-core requires setuptools<80
+setuptools<80
+torch>=2.5.1
