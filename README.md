@@ -69,6 +69,7 @@ The checkpoint path is set by `CKPT_PATH` at the top of [diffdef_pkg/diffdef_nod
 | `--goal-topic` | `/goal_pointcloud` | Output goal point cloud. |
 | `--sync-slop` | `0.2` | Max timestamp difference (s) between start and context clouds. |
 | `--queue-size` | `5` | Synchronizer queue size. |
+| `--mean-latent` | off | Use the prior mean latent (all zeros) instead of a random one. The diffusion noise is still random. |
 | `--debug-pickle` | off | If given, pickle the first raw, down-sampled, and goal clouds to this path. |
 
 Run with `--help` to see the same list. Paths may use `~`.

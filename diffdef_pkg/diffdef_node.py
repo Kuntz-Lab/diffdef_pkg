@@ -55,6 +55,7 @@ class DiffDefGoalPCNode(Node):
                  goal_topic='/goal_pointcloud',
                  sync_slop=0.2,
                  queue_size=5,
+                 mean_latent=False,
                  debug_pickle_path=''):
         super().__init__('diffdef_goal_pc_node')
 
@@ -68,6 +69,8 @@ class DiffDefGoalPCNode(Node):
         self.goal_topic = goal_topic
         self.slop = sync_slop
         self.queue_size = queue_size
+        # Use the prior mean (w = 0) instead of a random latent
+        self.mean_latent = mean_latent
         # Pickle the first set of clouds here, if given
         self.debug_pickle_path = os.path.expanduser(debug_pickle_path)
         self.has_saved_debug_pickle = False
@@ -210,7 +213,11 @@ class DiffDefGoalPCNode(Node):
         context_t = torch.from_numpy(context_n).float().unsqueeze(0).to(self.device)
 
         with torch.no_grad():
-            z = torch.randn(1, self.ckpt_args.latent_dim, device=self.device)
+            # Latent in the flow's N(0, I) base space. sample() maps it through the flow.
+            if self.mean_latent:
+                z = torch.zeros(1, self.ckpt_args.latent_dim, device=self.device)
+            else:
+                z = torch.randn(1, self.ckpt_args.latent_dim, device=self.device)
             pred_n = self.model.sample(
                 z,
                 context_t,
@@ -238,6 +245,8 @@ def parse_args(argv):
     parser.add_argument('--sync-slop', type=float, default=0.2,
                         help='Max timestamp difference (s) between start and context clouds.')
     parser.add_argument('--queue-size', type=int, default=5, help='Synchronizer queue size.')
+    parser.add_argument('--mean-latent', action='store_true',
+                        help='Use the prior mean latent (all zeros) instead of a random one.')
     parser.add_argument('--debug-pickle', default='',
                         help='If given, pickle the first raw, down-sampled, and goal clouds here.')
     return parser.parse_args(argv)
@@ -257,6 +266,7 @@ def main(args=None):
         goal_topic=cli_args.goal_topic,
         sync_slop=cli_args.sync_slop,
         queue_size=cli_args.queue_size,
+        mean_latent=cli_args.mean_latent,
         debug_pickle_path=cli_args.debug_pickle,
     )
     try:
