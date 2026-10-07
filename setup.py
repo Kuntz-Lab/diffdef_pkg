@@ -1,5 +1,16 @@
 from setuptools import find_packages, setup
 
+# Give console_scripts launchers a `#!/usr/bin/env python3` shebang, so they run
+# on whichever Python is active (e.g. a venv with torch) rather than the one
+# that ran colcon. setup.cfg's [build_scripts] covers a normal install, but
+# `colcon build --symlink-install` uses `setup.py develop`, which ignores it.
+try:
+    from setuptools.command.easy_install import CommandSpec
+    CommandSpec.from_environment = classmethod(
+        lambda cls: cls.from_string('/usr/bin/env python3'))
+except ImportError:
+    pass
+
 package_name = 'diffdef_pkg'
 
 setup(

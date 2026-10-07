@@ -32,16 +32,15 @@ source ~/venvs/diffdef/bin/activate
 pip install -r ~/retraction_ws/src/diffdef_pkg/requirements.txt
 ```
 
-Build with the venv active:
+Build with plain `colcon`. The venv doesn't need to be active:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/venvs/diffdef/bin/activate
 cd ~/retraction_ws
-python -m colcon build --symlink-install --packages-select diffdef_pkg
+colcon build --symlink-install --packages-select diffdef_pkg
 ```
 
-Use `python -m colcon`, not plain `colcon`. With `--symlink-install`, the `diffdef_node` launcher is hard-coded to the Python that ran colcon. Plain `colcon` runs on `/usr/bin/python3`, which has no torch, so the node would fail on `import torch` even with the venv active.
+The `diffdef_node` launcher's shebang is `#!/usr/bin/env python3`, so it runs on whichever `python3` is first on `PATH` at run time. `setup.py` sets this, because `--symlink-install` would otherwise hard-code the Python that ran colcon.
 
 ### Running
 
