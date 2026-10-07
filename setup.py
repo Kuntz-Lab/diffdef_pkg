@@ -26,7 +26,7 @@ setup(
     zip_safe=True,
     maintainer='britton',
     maintainer_email='brittonty@gmail.com',
-    description='ROS 2 node that predicts a goal point cloud from start and context '
+    description='ROS 2 nodes that predict a goal point cloud from start and context '
                 'point clouds with DiffDef',
     license='Apache-2.0',
     extras_require={
@@ -37,6 +37,7 @@ setup(
     entry_points={
         'console_scripts': [
             'diffdef_node = diffdef_pkg.diffdef_node:main',
+            'diffdef_service_node = diffdef_pkg.diffdef_service_node:main',
         ],
     },
 )

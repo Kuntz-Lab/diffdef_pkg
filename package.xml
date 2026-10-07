@@ -3,7 +3,7 @@
 <package format="3">
   <name>diffdef_pkg</name>
   <version>0.0.0</version>
-  <description>ROS 2 node that predicts a goal point cloud from start and context point clouds with DiffDef</description>
+  <description>ROS 2 nodes that predict a goal point cloud from start and context point clouds with DiffDef</description>
   <maintainer email="brittonty@gmail.com">britton</maintainer>
   <license>Apache-2.0</license>
 
@@ -12,6 +12,7 @@
   <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>sensor_msgs_py</exec_depend>
   <exec_depend>message_filters</exec_depend>
+  <exec_depend>retraction_interface</exec_depend>
   <exec_depend>python3-numpy</exec_depend>
   <!-- torch is pip-only: see requirements.txt -->
 
